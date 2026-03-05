@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love!</title>
+    <style>
+        /* --- CSS STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;500&display=swap');
+
+        :root {
+            --primary-color: #ff7eb3;
+            --secondary-color: #ff758c;
+            --bg-color: #fff0f5;
+            --text-color: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* Floating Hearts Background */
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -100px;
+            background-color: rgba(255, 118, 117, 0.4);
+            width: 20px;
+            height: 20px;
+            transform: rotate(45deg);
+            animation: float 6s infinite ease-in;
+        }
+
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -10px; left: 0; }
+        .heart::after { left: -10px; top: 0; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(45deg) scale(0.8); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(45deg) scale(1.2); opacity: 0; }
+        }
+
+        /* Landing Screen */
+        #landing {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            transition: opacity 1s ease;
+        }
+
+        .btn-open {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 126, 179, 0.4);
+            transition: transform 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-open:hover {
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        #content {
+            display: none; /* Hidden initially */
+            padding: 40px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        /* Photo Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .photo-frame {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: rotate(-3deg);
+            transition: transform 0.3s;
+        }
+
+        .photo-frame:nth-child(even) {
+            transform: rotate(3deg);
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.1) rotate(0deg);
+            z-index: 10;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            border-radius: 5px;
+            display: block;
+        }
+
+        /* Message Box */
+        .message-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .message-box::before {
+            content: "💌";
+            font-size: 2rem;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Music Player */
+        .music-player {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- AUDIO PLAYER -->
+    <!-- REPLACE THE SRC LINK BELOW WITH YOUR OWN MP3 LINK IF NEEDED -->
+    <audio id="bg-music" loop>
+        <source src="baby.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Background Animation -->
+    <div class="bg-hearts" id="hearts-container"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Landing Screen -->
+    <div id="landing">
+        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">I have a surprise for you...</h1>
+        <button class="btn-open" onclick="openGift()">Click to Open 💖</button>
+    </div>
+
+    <!-- Main Content (Hidden initially) -->
+    <div id="content">
+        <!-- CHANGE THIS: Her Name -->
+        <h1>Happy Birthday Sayaanggg!</h1>
+        <p class="subtitle">To the most beautiful soul I know.</p>
+
+        <!-- Photo Gallery -->
+        <div class="gallery">
+            <!-- CHANGE THESE: Replace src with your image filenames -->
+            <div class="photo-frame">
+                <img src="foto5.jpg" alt="Memory 1">
+            </div>
+            <div class="photo-frame">
+                <img src="foto4.jpg" alt="Memory 2">
+            </div>
+            <div class="photo-frame">
+                <img src="foto2.jpg" alt="Memory 3">
+            </div>
+        </div>
+
+        <!-- Heartfelt Message -->
+        <div class="message-box">
+            <!-- CHANGE THIS: Your Message -->
+            <p>
+                Happy Birthday to my favorite person! <br><br>
+                Setiap hari bersamamu terasa seperti hadiah, tetapi hari ini sangat istimewa.
+                Terima kasih telah menjadi pasanganku, sahabat terbaikku, dan petualangan terhebatku.
+
+Semoga tahun ini membawa kebahagiaan bagimu.
+                <br><br>
+                I love you more than code can express! ❤️
+            </p>
+        </div>
+
+        <!-- Optional Music Player -->
+        <div class="music-player">
+            <p>🎵 Playing: "Angel baby" - </p>
+        </div>
+    </div>
+
+    <script>
+        // --- JAVASCRIPT LOGIC ---
+
+        // 1. Create Floating Hearts Background
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // 2. Open the Gift & Play Music
+        function openGift() {
+            const landing = document.getElementById('landing');
+            const content = document.getElementById('content');
+            const music = document.getElementById('bg-music');
+
+            // Fade out landing
+            landing.style.opacity = '0';
+            
+            setTimeout(() => {
+                landing.style.display = 'none';
+                content.style.display = 'block';
+                
+                // Trigger reflow to restart animation
+                void content.offsetWidth; 
+                
+                content.style.opacity = '1';
+                startConfetti(); // Start confetti when opened
+                
+                // PLAY THE MUSIC
+                music.volume = 0.5; // Set volume to 50%
+                music.play().catch(error => {
+                    console.log("Autoplay was prevented. User interaction required.");
+                });
+            }, 1000);
+        }
+
+        // 3. Simple Confetti Effect (Vanilla JS)
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const pieces = [];
+            const colors = ['#ff7eb3', '#ff758c', '#ffb3c1', '#fff', '#ffd700'];
+
+            for (let i = 0; i < 150; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 3 + 2,
+                    angle: Math.random() * 360
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    ctx.fillStyle = p.color;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.angle * Math.PI / 180);
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+
+                    p.y += p.speed;
+                    p.angle += 2;
+
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+    </script>
+</body>
+</html>
